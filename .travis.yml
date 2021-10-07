@@ -1,17 +1,17 @@
 language: python
 python:
     - "3.9"
-# command to install dependencies
 install:
     - pip install -r requirements.txt
 env:
     - FLASK_APP=src/run.py DATABASE_URL=postgresql://testing:1234@localhost/flask
 services:
     - postgresql
-# command to run tests
 before_script:
     - psql -c "CREATE USER testing WITH PASSWORD '1234';" -U postgres
     - psql -c "CREATE DATABASE flask;" -U postgres
 script:
     - flask db upgrade
     - pytest
+notifications:
+    email: false
