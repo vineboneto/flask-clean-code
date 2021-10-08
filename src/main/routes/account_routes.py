@@ -1,9 +1,6 @@
 from flask import Flask
 from src.main.factories import make_add_account, make_load_account_by_id, make_update_account
-from src.main.adapters import make_route, auth, adapter_route
-
-
-adapt = make_route()
+from src.main.adapters import auth, adapter_route
 
 create = adapter_route(make_add_account())
 load_by_id = adapter_route(make_load_account_by_id())
