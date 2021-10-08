@@ -16,7 +16,9 @@ class BaseModel:
         db.session.commit()
         return self
 
-    def update(self):
+    def update(self, **data: dict):
+        for k, v in data.items():
+            setattr(self, k, v)
         db.session.commit()
         return self
 
@@ -26,7 +28,9 @@ class AccountModel(db.Model, BaseModel):
 
     id = db.Column("id", db.Integer, primary_key=True)
     username = db.Column("username", db.String(50), nullable=True)
+    login = db.Column("login", db.String(50), unique=True)
 
-    def __init__(self, username: str) -> None:
+    def __init__(self, username: str, login: str) -> None:
         super().__init__()
         self.username = username
+        self.login = login

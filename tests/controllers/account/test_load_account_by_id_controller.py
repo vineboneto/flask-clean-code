@@ -15,11 +15,11 @@ def repo_mock(account=None):
 
 
 async def test_load_account_on_success(client):
-    account = Account(id=10, username="John Doe")
+    account = Account(id=10, username="John Doe", login="JohnDoe")
     current_controller = LoadAccountByIdController(repo_mock(account))
     request = adapt(dict(id=10))
     response = await current_controller.handle(request)
-    expected_response = Account(id=10, username="John Doe")
+    expected_response = Account(id=10, username="John Doe", login="JohnDoe")
     assert response.status == 200
     assert response.body == expected_response
 

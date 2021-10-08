@@ -35,6 +35,9 @@ class Controller:
     def ok(self, data) -> HttpResponse:
         return HttpResponse(data, status=200)
 
+    def forbidden(self) -> HttpResponse:
+        return HttpResponse(dict(message="Access Denied"), 403)
+
     def no_content(self) -> HttpResponse:
         return HttpResponse("", 204)
 
