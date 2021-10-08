@@ -16,6 +16,10 @@ class BaseModel:
         db.session.commit()
         return self
 
+    def update(self):
+        db.session.commit()
+        return self
+
 
 class AccountModel(db.Model, BaseModel):
     __tablename__ = "Account"

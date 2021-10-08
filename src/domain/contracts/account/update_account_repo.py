@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from src.domain.models import Account
 
 
-class AddAccountRepo(metaclass=ABCMeta):
+class UpdateAccountRepo(metaclass=ABCMeta):
     @abstractmethod
-    async def add(self, params) -> Account:
+    async def update(self, params) -> Account:
         raise NotImplementedError
