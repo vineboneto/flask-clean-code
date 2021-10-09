@@ -15,4 +15,4 @@ class UpdateAccountController(Controller):
 
     async def perform(self, request) -> Account:
         data = await self.update_account_repo.update(request)
-        return self.ok(data)
+        return self.ok(data) if data else self.no_content()
