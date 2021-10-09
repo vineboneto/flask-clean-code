@@ -22,6 +22,11 @@ class BaseModel:
         db.session.commit()
         return self
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return self
+
 
 class AccountModel(db.Model, BaseModel):
     __tablename__ = "Account"

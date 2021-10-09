@@ -1,4 +1,4 @@
-from src.domain.contracts import AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo, account
+from src.domain.contracts import AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo, DeleteByIdRepo
 from src.domain.models import Account
 from src.infra.sql_postgres import AccountModel, db
 
@@ -17,6 +17,13 @@ class AccountRepository(AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo):
         if not exist:
             return None
         data = exist.update(username=params.username, login=params.login)
+        return self.__adapt_account(data)
+
+    async def delete(self, id: int):
+        exist = AccountModel.query.get(id)
+        if not exist:
+            return None
+        data = exist.delete()
         return self.__adapt_account(data)
 
     def __adapt_account(self, model: AccountModel) -> Account:
