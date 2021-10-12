@@ -3,7 +3,9 @@ from src.domain.models import AccountResponse
 from src.infra.sql_postgres import AccountModel
 
 
-class AccountRepository(Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo):
+class AccountRepository(
+    Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo, Repo.CheckExist
+):
     async def add(self, params) -> AccountResponse:
         account_model = AccountModel(
             username=params.username, login=params.login, password=params.password
@@ -21,12 +23,19 @@ class AccountRepository(Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.D
         data = exist.update(username=params.username, login=params.login)
         return self.__adapt_account(data)
 
-    async def delete(self, id: int):
+    async def delete(self, id: int) -> AccountResponse:
         exist = AccountModel.query.get(id)
         if not exist:
             return None
         data = exist.delete()
         return self.__adapt_account(data)
+
+    async def check(self, value) -> bool:
+        exist = AccountModel.query.filter_by(login=value).first()
+        print(exist)
+        if exist:
+            return True
+        return False
 
     def __adapt_account(self, model: AccountModel) -> AccountResponse:
         return (

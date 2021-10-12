@@ -41,6 +41,9 @@ class Controller:
     def no_content(self) -> HttpResponse:
         return HttpResponse("", 204)
 
+    def conflict(self, message: str) -> HttpResponse:
+        return HttpResponse(Exception(message), 409)
+
     def server_error(self, err: Exception) -> HttpResponse:
         return HttpResponse(err, status=500)
 
