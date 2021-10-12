@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv('.env')
+load_dotenv(".env")
 
 
 class Config:
@@ -23,6 +23,7 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    FLASK_ENV = "production"
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
 
 

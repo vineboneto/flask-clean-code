@@ -2,8 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class Account:
+class AccountResponse:
     id: str
     login: str
     username: str
-    password: str

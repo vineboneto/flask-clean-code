@@ -1,25 +1,20 @@
-from src.domain.contracts import (
-    AddAccountRepo,
-    LoadAccountByIdRepo,
-    UpdateAccountRepo,
-    DeleteByIdRepo,
-)
-from src.domain.models import Account
-from src.infra.sql_postgres import AccountModel, db
+import src.domain.contracts.repos as Repo
+from src.domain.models import AccountResponse
+from src.infra.sql_postgres import AccountModel
 
 
-class AccountRepository(AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo):
-    async def add(self, params) -> Account:
+class AccountRepository(Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo):
+    async def add(self, params) -> AccountResponse:
         account_model = AccountModel(
             username=params.username, login=params.login, password=params.password
         ).create()
         return self.__adapt_account(account_model)
 
-    async def load_by_id(self, id: int) -> Account:
+    async def load_by_id(self, id: int) -> AccountResponse:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
 
-    async def update(self, params) -> Account:
+    async def update(self, params) -> AccountResponse:
         exist = AccountModel.query.get(params.id)
         if not exist:
             return None
@@ -33,11 +28,9 @@ class AccountRepository(AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo):
         data = exist.delete()
         return self.__adapt_account(data)
 
-    def __adapt_account(self, model: AccountModel) -> Account:
+    def __adapt_account(self, model: AccountModel) -> AccountResponse:
         return (
-            Account(
-                id=model.id, username=model.username, login=model.login, password=model.password
-            )
+            AccountResponse(id=model.id, username=model.username, login=model.login)
             if model
             else None
         )
