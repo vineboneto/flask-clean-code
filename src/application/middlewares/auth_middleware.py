@@ -1,7 +1,7 @@
-from src.application.controllers import Controller
+from src.application.middlewares import Middleware
 
 
-class AuthMiddleware(Controller):
+class AuthMiddleware(Middleware):
     def __init__(self) -> None:
         super().__init__()
 

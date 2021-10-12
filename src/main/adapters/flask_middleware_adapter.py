@@ -1,12 +1,12 @@
 import asyncio
 from flask.json import jsonify
 from flask.views import View
-from src.application.controllers import Controller
+from src.application.middlewares import Middleware
 from src.application.middlewares import AuthMiddleware
-from .flask_adapter_request import adapt_request
+from src.main.adapters import adapt_request
 
 
-def adapter_middleware(middleware: Controller, view: View):
+def adapter_middleware(middleware: Middleware, view: View):
     def decorator(*args, **kwargs):
         request = adapt_request(kwargs)
         http = asyncio.run(middleware.handle(request))

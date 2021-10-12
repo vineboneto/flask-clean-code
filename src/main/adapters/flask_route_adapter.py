@@ -1,7 +1,7 @@
 import asyncio
 from flask.json import jsonify
 from src.application.controllers import Controller
-from .flask_adapter_request import adapt_request
+from src.main.adapters import adapt_request
 
 
 def adapter_route(controller: Controller):
