@@ -12,5 +12,4 @@ def adapt_request(args_params):
         args_dict.update(request.json)
     args_dict.update(request.args.to_dict())
     args_dict.update(args_params)
-    transform = to_namedtuple(args_dict)
-    return transform
+    return args_dict

@@ -11,7 +11,3 @@ def client():
     app.config.from_object(config_by_name["test"])
     with app.test_client() as client:
         yield client
-
-
-def adapt_request(current_dict):
-    return namedtuple("request", current_dict.keys())(*current_dict.values())

@@ -16,12 +16,12 @@ class UpdateAccountController(Controller):
     async def perform(self, request):
         exist = await self.__check_exist(request)
         if exist:
-            return self.conflict(f"Already exist {request.login}")
+            return self.conflict(f"Already exist {request['login']}")
         data = await self.update_account.update(request)
         return self.ok(data) if data else self.no_content()
 
     async def __check_exist(self, request):
-        account = await self.load_account_by_login.load_by_login(request.login)
-        if account and int(request.id) != account.id and request.login == account.login:
+        account = await self.load_account_by_login.load_by_login(request["login"])
+        if account and int(request["id"]) != account["id"] and request["login"] == account["login"]:
             return True
         return False

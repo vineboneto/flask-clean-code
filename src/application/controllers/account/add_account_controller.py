@@ -16,10 +16,10 @@ class AddAccountController(Controller):
         self.password_hash = password_hash
 
     async def perform(self, request):
-        exist = await self.check_exist_login.check(request.login)
+        exist = await self.check_exist_login.check(request["login"])
         if exist:
-            return self.conflict(f"Already exist {request.login}")
-        new_password_hash = await self.password_hash.hasher(request.password)
-        request = request._replace(password=new_password_hash)
+            return self.conflict(f"Already exist {request['login']}")
+        new_password_hash = await self.password_hash.hasher(request["login"])
+        request = {**request, "password": new_password_hash}
         data = await self.add_account.add(request)
         return self.ok(data)

@@ -10,5 +10,5 @@ class DeleteAccountController(Controller):
         self.delete_by_id_account = delete_by_id_account
 
     async def perform(self, request):
-        data = await self.delete_by_id_account.delete(request.id)
+        data = await self.delete_by_id_account.delete(request["id"])
         return self.ok(data) if data else self.no_content()

@@ -11,7 +11,7 @@ class SchemaAdapter(Validator):
 
     def validate(self, data):
         try:
-            self.schema.validate(data._asdict())
+            self.schema.validate(data)
             return None
         except Exception as e:
             return e
