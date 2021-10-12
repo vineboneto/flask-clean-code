@@ -5,7 +5,7 @@ from src.main.app import create_app
 from collections import namedtuple
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def client():
     app = create_app()
     app.config.from_object(config_by_name["test"])
