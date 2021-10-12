@@ -1,16 +1,17 @@
-from src.domain.contracts.repos import check_exist
 from src.domain.models import AccountResponse
-from src.domain.contracts import AddRepo, CheckExist
+from src.domain.contracts import AddRepo, CheckExistRepo
 from src.application.controllers import Controller
 from src.application.validator import Validator
 
 
 class AddAccountController(Controller):
     add_account: AddRepo
-    check_exist_login: CheckExist
+    check_exist_login: CheckExistRepo
     validator: Validator
 
-    def __init__(self, add_account: AddRepo, check_exist_login: CheckExist, validator: Validator):
+    def __init__(
+        self, add_account: AddRepo, check_exist_login: CheckExistRepo, validator: Validator
+    ):
         super().__init__(validator)
         self.add_account = add_account
         self.check_exist_login = check_exist_login

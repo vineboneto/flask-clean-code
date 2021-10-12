@@ -4,7 +4,7 @@ from src.infra.sql_postgres import AccountModel
 
 
 class AccountRepository(
-    Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo, Repo.CheckExist
+    Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo, Repo.CheckExistRepo
 ):
     async def add(self, params) -> AccountResponse:
         account_model = AccountModel(
@@ -32,7 +32,6 @@ class AccountRepository(
 
     async def check(self, value) -> bool:
         exist = AccountModel.query.filter_by(login=value).first()
-        print(exist)
         if exist:
             return True
         return False
