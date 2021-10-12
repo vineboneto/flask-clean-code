@@ -17,6 +17,12 @@ class AccountRepository:
         ).create()
         return self.__adapt_account(account_model)
 
+    async def load_by_login(self, login: str) -> AccountResponse:
+        account_model = AccountModel.query.filter_by(login=login).first()
+        if account_model:
+            return self.__adapt_account(account_model)
+        return None
+
     async def load_by_id(self, id: int) -> AccountResponse:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
