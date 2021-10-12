@@ -1,11 +1,16 @@
-import src.domain.contracts.repos as Repo
-from src.domain.models import AccountResponse
 from src.infra.sql_postgres import AccountModel
 
+from dataclasses import dataclass
 
-class AccountRepository(
-    Repo.AddRepo, Repo.LoadByIdRepo, Repo.UpdateRepo, Repo.DeleteByIdRepo, Repo.CheckExistRepo
-):
+
+@dataclass(frozen=True)
+class AccountResponse:
+    id: str
+    login: str
+    username: str
+
+
+class AccountRepository:
     async def add(self, params) -> AccountResponse:
         account_model = AccountModel(
             username=params.username, login=params.login, password=params.password

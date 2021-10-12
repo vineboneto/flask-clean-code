@@ -4,4 +4,6 @@ from src.infra.schema_validator import SchemaAdapter, schema_update_account
 
 
 def make_update_account() -> UpdateAccountController:
-    return UpdateAccountController(make_repo_account(), SchemaAdapter(schema_update_account))
+    return UpdateAccountController(
+        make_repo_account(), make_repo_account(), SchemaAdapter(schema_update_account)
+    )
