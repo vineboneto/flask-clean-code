@@ -2,10 +2,10 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 
 
 class JwtAdapter:
-    def access_token(account):
+    async def access_token(self, account):
         digest = create_access_token(identity=account)
         return digest
 
-    def refresh_token(account):
+    async def refresh_token(self, account):
         digest = create_refresh_token(identity=account)
         return digest

@@ -11,5 +11,4 @@ def test_load_by_id_200(client):
 
 def test_load_by_id_204(client):
     response = client.get(f"/accounts/{0}")
-    print(response)
     assert response.status_code == 204

@@ -32,7 +32,7 @@ class AccountRepository:
         data = exist.delete()
         return self.__adapt_account(data)
 
-    async def check(self, value) -> bool:
+    async def check_login(self, value) -> bool:
         exist = AccountModel.query.filter_by(login=value).first()
         if exist:
             return True
