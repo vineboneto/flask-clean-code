@@ -20,7 +20,6 @@ class AddAccountController(Controller):
         if exist:
             return self.conflict(f"Already exist {request.login}")
         new_password_hash = await self.password_hash.hasher(request.password)
-        print(new_password_hash)
         request = request._replace(password=new_password_hash)
         data = await self.add_account.add(request)
         return self.ok(data)
