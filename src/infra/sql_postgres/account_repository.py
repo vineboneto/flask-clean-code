@@ -1,11 +1,18 @@
-from src.domain.contracts import AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo, DeleteByIdRepo
+from src.domain.contracts import (
+    AddAccountRepo,
+    LoadAccountByIdRepo,
+    UpdateAccountRepo,
+    DeleteByIdRepo,
+)
 from src.domain.models import Account
 from src.infra.sql_postgres import AccountModel, db
 
 
 class AccountRepository(AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo):
     async def add(self, params) -> Account:
-        account_model = AccountModel(username=params.username, login=params.login).create()
+        account_model = AccountModel(
+            username=params.username, login=params.login, password=params.password
+        ).create()
         return self.__adapt_account(account_model)
 
     async def load_by_id(self, id: int) -> Account:
@@ -27,4 +34,10 @@ class AccountRepository(AddAccountRepo, LoadAccountByIdRepo, UpdateAccountRepo):
         return self.__adapt_account(data)
 
     def __adapt_account(self, model: AccountModel) -> Account:
-        return Account(id=model.id, username=model.username, login=model.login) if model else None
+        return (
+            Account(
+                id=model.id, username=model.username, login=model.login, password=model.password
+            )
+            if model
+            else None
+        )

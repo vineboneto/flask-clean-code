@@ -6,7 +6,7 @@ faker = Faker()
 
 
 def test_add_account_200(client):
-    request_body = dict(username=faker.name(), login=faker.name())
+    request_body = dict(username=faker.name(), login=faker.name(), password=faker.password())
     response_account = client.post("/accounts", json=request_body)
     data = json.loads(response_account.data)
     response = client.delete(f"/accounts/{data['id']}")
