@@ -8,4 +8,4 @@ class RefreshTokenController(Controller):
 
     async def perform(self, request):
         token = await self.jwt.verify_refresh_token()
-        return self.ok(token=token)
+        return self.ok(dict(token=token))

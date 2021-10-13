@@ -4,7 +4,6 @@ from flask.testing import FlaskClient
 from flask_jwt_extended import create_access_token
 from src.main.config import config_by_name
 from src.main.app import create_app
-from collections import namedtuple
 
 
 @pytest.fixture(scope="session")
