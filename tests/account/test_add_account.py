@@ -1,6 +1,6 @@
 import json
-from tests.conftest import client
 from faker import Faker
+from tests.conftest import client
 
 faker = Faker()
 

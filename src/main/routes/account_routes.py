@@ -11,6 +11,6 @@ delete = adapter_route(factories.make_delete_account())
 def set_account_routes(app: Flask) -> Flask:
     app.add_url_rule("/accounts", "create", create, methods=["POST"])
     app.add_url_rule("/accounts/<id>", "load_by_id", auth(load_by_id), methods=["GET"])
-    app.add_url_rule("/accounts/<id>", "update", update, methods=["PUT"])
-    app.add_url_rule("/accounts/<id>", "delete", delete, methods=["DELETE"])
+    app.add_url_rule("/accounts/<id>", "update", auth(update), methods=["PUT"])
+    app.add_url_rule("/accounts/<id>", "delete", auth(delete), methods=["DELETE"])
     return app

@@ -1,6 +1,5 @@
 from flask.testing import FlaskClient
 from faker import Faker
-from werkzeug.datastructures import Headers
 from tests.conftest import client, mock_authorization
 
 faker = Faker()
