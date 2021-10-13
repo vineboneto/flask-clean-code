@@ -1,15 +1,8 @@
-from typing import Any
 from src.application.controllers import Controller
 from src.application.validator import Validator
 
 
 class AddAccountController(Controller):
-    add_account: Any
-    check_exist_login: Any
-    password_hash: Any
-    jwt: Any
-    validator: Validator
-
     def __init__(self, add_account, check_exist_login, password_hash, jwt, validator: Validator):
         super().__init__(validator)
         self.add_account = add_account

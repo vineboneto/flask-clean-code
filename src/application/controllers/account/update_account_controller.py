@@ -1,13 +1,8 @@
-from typing import Any
 from src.application.controllers import Controller
 from src.application.validator import Validator
 
 
 class UpdateAccountController(Controller):
-    update_account: Any
-    validator: Validator
-    load_account_by_login: Any
-
     def __init__(self, update_account, load_account_by_login, validator: Validator):
         super().__init__(validator)
         self.update_account = update_account
