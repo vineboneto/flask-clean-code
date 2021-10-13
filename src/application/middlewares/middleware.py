@@ -11,20 +11,14 @@ class HttpResponse:
 
 class Middleware:
     @abstractmethod
-    async def perform(self, request: Any) -> HttpResponse:
-        raise NotImplementedError
-
     async def handle(self, request: Any) -> HttpResponse:
-        try:
-            return await self.perform(request)
-        except Exception as e:
-            return self.server_error(e)
+        raise NotImplementedError
 
     def ok(self, data) -> HttpResponse:
         return HttpResponse(data, status=200)
 
-    def forbidden(self) -> HttpResponse:
-        return HttpResponse(dict(message="Access Denied"), 403)
+    def forbidden(self, e: Exception) -> HttpResponse:
+        return HttpResponse(e, 403)
 
     def no_content(self) -> HttpResponse:
         return HttpResponse("", 204)

@@ -12,4 +12,8 @@ def adapt_request(args_params):
         args_dict.update(request.json)
     args_dict.update(request.args.to_dict())
     args_dict.update(args_params)
+    headers_dict = dict()
+    for key in request.headers.keys():
+        headers_dict.update({key: request.headers[key]})
+    args_dict.update(headers_dict)
     return args_dict
