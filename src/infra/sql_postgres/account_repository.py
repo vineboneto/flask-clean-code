@@ -2,6 +2,9 @@ from src.infra.sql_postgres import AccountModel
 
 
 class AccountRepository:
+    def __init__(self) -> None:
+        pass
+
     async def add(self, params) -> dict:
         account_model = AccountModel(
             username=params["username"], login=params["login"], password=params["password"]

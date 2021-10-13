@@ -2,6 +2,7 @@ from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
     verify_jwt_in_request,
+    get_jwt_identity,
     get_jwt,
 )
 
@@ -17,6 +18,12 @@ class JwtAdapter:
 
     async def verify_token(self):
         verify_jwt_in_request()
+
+    async def verify_refresh_token(self):
+        verify_jwt_in_request(refresh=True)
+        identity = get_jwt_identity()
+        digest = create_access_token(identity=identity)
+        return digest
 
     def get_current_user(self):
         try:
