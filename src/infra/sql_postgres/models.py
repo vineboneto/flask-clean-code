@@ -9,6 +9,8 @@ migrate = Migrate()
 class BaseModel:
     created_at = db.Column("created_at", db.DateTime, nullable=True, default=None)
     updated_at = db.Column("updated_at", db.DateTime, nullable=True, default=None)
+    # created_by = db.Column("created_by", db.DateTime, nullable=True, default=None)
+    # updated_by = db.Column("updated_by", db.DateTime, nullable=True, default=None)
 
     def create(self):
         self.created_at = get_current_date()
@@ -17,6 +19,7 @@ class BaseModel:
         return self
 
     def update(self, **data: dict):
+        self.updated_at = get_current_date()
         for k, v in data.items():
             setattr(self, k, v)
         db.session.commit()

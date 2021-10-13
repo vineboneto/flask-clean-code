@@ -17,7 +17,7 @@ class AddAccountController(Controller):
         new_password_hash = await self.password_hash.hasher(request["login"])
         request = {**request, "password": new_password_hash}
         data = await self.add_account.add(request)
-        token = await self.jwt.access_token(data["login"])
-        refresh_token = await self.jwt.refresh_token(data["login"])
+        token = await self.jwt.access_token(data)
+        refresh_token = await self.jwt.refresh_token(data)
         data = {**data, "token": token, "refresh_token": refresh_token}
         return self.ok(data)

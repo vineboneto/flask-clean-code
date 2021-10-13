@@ -8,8 +8,7 @@ class AuthMiddleware(Middleware):
 
     async def handle(self, request):
         try:
-            self.jwt.verify_token()
+            await self.jwt.verify_token()
             return self.no_content()
         except Exception as e:
-            print(e)
             return self.forbidden(e)
