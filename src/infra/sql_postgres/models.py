@@ -7,7 +7,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 
-class BaseModel:
+class Model:
 
     created_at = db.Column("created_at", db.DateTime, nullable=True, default=None)
     updated_at = db.Column("updated_at", db.DateTime, nullable=True, default=None)
@@ -37,7 +37,7 @@ class BaseModel:
         return self
 
 
-class AccountModel(db.Model, BaseModel):
+class AccountModel(db.Model, Model):
     __tablename__ = "Account"
 
     id = db.Column("id", db.Integer, primary_key=True)
