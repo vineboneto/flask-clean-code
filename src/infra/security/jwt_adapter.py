@@ -18,5 +18,9 @@ class JwtAdapter:
     async def verify_token(self):
         verify_jwt_in_request()
 
-    async def get_current_user(self):
-        return get_jwt()["sub"]
+    def get_current_user(self):
+        try:
+            verify_jwt_in_request()
+            return get_jwt()["sub"]["login"] if "sub" in get_jwt() else None
+        except Exception as e:
+            return None
