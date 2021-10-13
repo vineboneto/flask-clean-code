@@ -17,4 +17,4 @@ schema==0.7.4
 waitress==2.0.0
 wheel==0.37.0
 Werkzeug==2.0.2
-Flask-JWT-Extended==0
+flask-jwt-extended==4.3.1
