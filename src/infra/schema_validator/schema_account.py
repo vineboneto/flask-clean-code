@@ -5,3 +5,5 @@ schema_add_account = Schema(
 )
 
 schema_update_account = Schema({"id": str, "username": str, "login": str}, ignore_extra_keys=True)
+
+schema_login = Schema({"login": str, "password": str}, ignore_extra_keys=True)

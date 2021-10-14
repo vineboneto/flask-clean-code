@@ -41,6 +41,9 @@ class Controller:
     def no_content(self) -> HttpResponse:
         return HttpResponse("", 204)
 
+    def unauthorized(self) -> HttpResponse:
+        return HttpResponse(Exception("Credentials invalid"), 401)
+
     def conflict(self, message: str) -> HttpResponse:
         return HttpResponse(Exception(message), 409)
 

@@ -17,6 +17,14 @@ class AccountRepository:
             return self.__adapt_account(account_model)
         return None
 
+    async def load_by_login_with_password(self, login: str) -> dict:
+        model = AccountModel.query.filter_by(login=login).first()
+        if model:
+            return dict(
+                id=model.id, username=model.username, login=model.login, password=model.password
+            )
+        return None
+
     async def load_by_id(self, id: int) -> dict:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
