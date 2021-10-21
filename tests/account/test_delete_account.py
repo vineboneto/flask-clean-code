@@ -1,14 +1,9 @@
-import json
-from tests.conftest import client, mock_authorization
-from faker import Faker
-
-faker = Faker()
+from tests.conftest import client
+from tests.mocks import mock_authorization, mock_create_account
 
 
 def test_delete_account_200(client):
-    request_body = dict(username=faker.name(), login=faker.name(), password=faker.password())
-    response_account = client.post("/accounts", json=request_body)
-    data = json.loads(response_account.data)
+    data = mock_create_account(client)
     response = client.delete(f"/accounts/{data['id']}", headers=mock_authorization())
     assert response.status_code == 200
 

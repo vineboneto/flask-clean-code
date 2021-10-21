@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from src.infra.date import get_current_date
-from src.infra.security import JwtAdapter
+from src.infra.helper import get_current_date, get_current_user
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,20 +13,24 @@ class Model:
     created_by = db.Column("created_by", db.String(255), nullable=True, default=None)
     updated_by = db.Column("updated_by", db.String(255), nullable=True, default=None)
 
+    def get_or_create(self, **data):
+        exist = self.query.filter_by(**data).first()
+        if not exist:
+            self.__set_attr(data)
+            exist = self.create()
+        return exist
+
     def create(self):
-        jwt = JwtAdapter()
-        self.created_by = jwt.get_current_user()
+        self.created_by = get_current_user()
         self.created_at = get_current_date()
         db.session.add(self)
         db.session.commit()
         return self
 
     def update(self, **data: dict):
-        jwt = JwtAdapter()
         self.updated_at = get_current_date()
-        self.updated_by = jwt.get_current_user()
-        for k, v in data.items():
-            setattr(self, k, v)
+        self.updated_by = get_current_user()
+        self.__set_attr(data)
         db.session.commit()
         return self
 
@@ -35,6 +38,33 @@ class Model:
         db.session.delete(self)
         db.session.commit()
         return self
+
+    def __set_attr(self, data):
+        for k, v in data.items():
+            setattr(self, k, v)
+
+
+class RoleModel(db.Model, Model):
+    __tablename__ = "Role"
+
+    id = db.Column("id", db.Integer, primary_key=True)
+    name = db.Column("name", db.String(50), unique=True)
+
+    def __init__(self, name: str = None) -> None:
+        super().__init__()
+        self.name = name
+
+    @staticmethod
+    def instance():
+        return RoleModel()
+
+
+account_roles = db.Table(
+    "AccountRole",
+    db.Column("id", db.Integer, primary_key=True, autoincrement=True),
+    db.Column("role_id", db.Integer, db.ForeignKey("Role.id"), nullable=True),
+    db.Column("account_id", db.Integer, db.ForeignKey("Account.id"), nullable=True),
+)
 
 
 class AccountModel(db.Model, Model):
@@ -44,9 +74,11 @@ class AccountModel(db.Model, Model):
     username = db.Column("username", db.String(50), nullable=True)
     login = db.Column("login", db.String(50), unique=True)
     password = db.Column("password", db.String(150), nullable=True)
+    roles = db.relationship("RoleModel", account_roles)
 
-    def __init__(self, username: str, login: str, password: str) -> None:
+    def __init__(self, username: str, login: str, password: str, roles: list) -> None:
         super().__init__()
         self.username = username
         self.login = login
         self.password = password
+        self.roles = roles

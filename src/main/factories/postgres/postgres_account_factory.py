@@ -1,4 +1,4 @@
-from src.infra.sql_postgres import AccountRepository
+from src.infra.sql_postgres import AccountRepository, RoleModel
 
 
 def make_repo_account() -> AccountRepository:

@@ -1,15 +1,34 @@
-from src.infra.sql_postgres import AccountModel
+from src.infra.sql_postgres import AccountModel, RoleModel
 
 
 class AccountRepository:
-    def __init__(self) -> None:
-        pass
-
     async def add(self, params) -> dict:
         account_model = AccountModel(
-            username=params["username"], login=params["login"], password=params["password"]
+            username=params["username"],
+            login=params["login"],
+            password=params["password"],
+            roles=self.__get_roles(params["roles"]),
         ).create()
         return self.__adapt_account(account_model)
+
+    async def update(self, params) -> dict:
+        account = AccountModel.query.get(params["id"])
+        if not account:
+            return None
+        data = account.update(
+            username=params["username"],
+            login=params["login"],
+            roles=self.__get_roles(params["roles"]),
+        )
+        return self.__adapt_account(data)
+
+    async def delete(self, id: int) -> dict:
+        exist = AccountModel.query.get(id)
+        print(exist)
+        if not exist:
+            return None
+        data = exist.delete()
+        return self.__adapt_account(data)
 
     async def load_by_login(self, login: str) -> dict:
         account_model = AccountModel.query.filter_by(login=login).first()
@@ -29,25 +48,24 @@ class AccountRepository:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
 
-    async def update(self, params) -> dict:
-        exist = AccountModel.query.get(params["id"])
-        if not exist:
-            return None
-        data = exist.update(username=params["username"], login=params["login"])
-        return self.__adapt_account(data)
-
-    async def delete(self, id: int) -> dict:
-        exist = AccountModel.query.get(id)
-        if not exist:
-            return None
-        data = exist.delete()
-        return self.__adapt_account(data)
-
     async def check_login(self, value) -> bool:
         exist = AccountModel.query.filter_by(login=value).first()
         if exist:
             return True
         return False
 
+    def __get_roles(self, account_roles):
+        roles = [RoleModel.instance().get_or_create(name=role) for role in account_roles]
+        return roles
+
     def __adapt_account(self, model: AccountModel) -> dict:
-        return dict(id=model.id, username=model.username, login=model.login) if model else None
+        return (
+            dict(
+                id=model.id,
+                username=model.username,
+                login=model.login,
+                roles=[role.name for role in model.roles],
+            )
+            if model
+            else None
+        )

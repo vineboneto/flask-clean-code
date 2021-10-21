@@ -1,12 +1,10 @@
-from flask.testing import FlaskClient
-from faker import Faker
-from tests.conftest import client, mock_authorization
-
-faker = Faker()
+from tests.conftest import client
+from tests.mocks import mock_authorization, mock_create_account
 
 
-def test_load_by_id_200(client: FlaskClient):
-    response = client.get(f"/accounts/{1}", headers=mock_authorization())
+def test_load_by_id_200(client):
+    data = mock_create_account(client)
+    response = client.get(f"/accounts/{data['id']}", headers=mock_authorization())
     assert response.status_code == 200
 
 
