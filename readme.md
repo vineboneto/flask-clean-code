@@ -7,7 +7,6 @@ Clean architecture object oriented using flask
 #### Design Patterns & Methodologies
 
 -   Clean Architecture
--   DDD
 -   Adapter
 -   Factory
 -   Composition
@@ -39,14 +38,14 @@ I'm use postgres.
 -   Setting .env in root dir with your data
 
 ```shell
-# .env
+# .env example
 HOST_DB="localhost"
 USER_DB="JohnDoe"
 PASSWORD_DB="1234"
 DATABASE="flask_database"
 ```
 
--   Upgrade your database with migrations
+-   Upgrade your database
 
 ```shell
 $ flask db upgrade
@@ -66,12 +65,7 @@ Just run
 
 ```shell
 # Developer
-cd src/
 $ flask run
-
-#Production
-cd src/
-waitress-serve --call 'run:create_app'
 ```
 
 > **Deploy**
