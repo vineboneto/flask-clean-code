@@ -16,7 +16,7 @@ class QueryBuilder:
         self.query_fields = query_fields
         return self
 
-    def done(self):
+    def run(self):
         queries = self.__wheres()
         data = self.model().filter_by_queries(queries)
         return data
@@ -28,4 +28,7 @@ class QueryBuilder:
 
     def __where(self, field_name):
         if field_name in self.values:
+            is_number = self.values[field_name].isnumeric()
+            if not is_number:
+                return getattr(self.model, field_name).ilike(f"%{self.values[field_name]}%")
             return getattr(self.model, field_name) == self.values[field_name]

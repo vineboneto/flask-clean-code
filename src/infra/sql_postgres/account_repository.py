@@ -1,5 +1,5 @@
-from src.infra.sql_postgres import AccountModel, RoleModel
-from src.infra.helper import QueryBuilder as query_builder
+from src.infra.sql_postgres import AccountModel, RoleModel, QueryBuilder as query_builder
+from src.infra.helper import Checker as check
 
 
 class AccountRepository:
@@ -36,7 +36,7 @@ class AccountRepository:
             return self.__adapt_account(account_model)
         return None
 
-    async def load_by_login_with_password(self, login: str) -> dict:
+    async def load_with_password(self, login: str) -> dict:
         model = AccountModel.query.filter_by(login=login).first()
         if model:
             return dict(
@@ -44,18 +44,25 @@ class AccountRepository:
             )
         return None
 
-    async def filter_fields(self, values) -> dict:
-        account_models = (
-            query_builder.select(AccountModel)
-            .these_values(values)
-            .these_fields(["username", "login"])
-            .done()
-        )
-        return self.__adapt_accounts(account_models, len(account_models))
-
     async def load_by_id(self, id: int) -> dict:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
+
+    async def load_by_fields(self, values: dict) -> dict:
+        query = (
+            query_builder.select(AccountModel)
+            .these_values(values)
+            .these_fields(["id", "username", "login"])
+            .run()
+        )
+        account_models = (
+            query.order_by(AccountModel.id)
+            .offset(check.of(values).exist("skip"))
+            .limit(check.of(values).exist("take"))
+            .all()
+        )
+        count = query.count()
+        return self.__adapt_accounts(account_models, count)
 
     async def check_login(self, value) -> bool:
         exist = AccountModel.query.filter_by(login=value).first()

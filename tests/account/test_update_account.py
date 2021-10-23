@@ -8,8 +8,8 @@ faker = Faker()
 
 def test_update_account_200(client):
     account = mock_create_account(client)
-    print(account)
     response = client.put(f"/accounts/{account['id']}", json=account, headers=mock_authorization())
+    print(response.data)
     assert response.status_code == 200
 
 

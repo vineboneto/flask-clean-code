@@ -11,7 +11,7 @@ class LoginController(Controller):
         self.load_account = load_account
 
     async def perform(self, request):
-        account = await self.load_account.load_by_login_with_password(request["login"])
+        account = await self.load_account.load_with_password(request["login"])
         if account:
             is_valid = await self.password_hash.check_password(
                 account["password"], request["password"]

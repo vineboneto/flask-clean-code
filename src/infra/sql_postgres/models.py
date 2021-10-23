@@ -41,8 +41,8 @@ class Model:
 
     def filter_by_queries(self, queries):
         if len(queries) > 0:
-            return self.query.filter(*queries).all()
-        return self.query.filter().all()
+            return self.query.filter(*queries)
+        return self.query.filter()
 
     def __set_attr(self, data):
         for k, v in data.items():

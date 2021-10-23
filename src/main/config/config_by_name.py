@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "something_key")
 class Config:
     DEBUG = True
     JWT_SECRET_KEY = SECRET_KEY
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=3)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
 
