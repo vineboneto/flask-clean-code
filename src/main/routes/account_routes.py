@@ -1,12 +1,12 @@
-import src.main.factories as factories
 from flask import Flask
+import src.main.factories.controllers as factories
 from src.main.adapters import auth, adapter_route
 
-create = adapter_route(factories.make_add_account())
-load_by_id = adapter_route(factories.make_load_account_by_id())
-update = adapter_route(factories.make_update_account())
-delete = adapter_route(factories.make_delete_account())
-refresh_token = adapter_route(factories.make_refresh_token())
+create = adapter_route(factories.make_add_account_controller())
+load_by_id = adapter_route(factories.make_load_account_by_id_controller())
+update = adapter_route(factories.make_update_account_controller())
+delete = adapter_route(factories.make_delete_account_controller())
+refresh_token = adapter_route(factories.make_refresh_token_controller())
 login = adapter_route(factories.make_login_controller())
 
 
