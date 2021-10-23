@@ -1,4 +1,5 @@
 from src.infra.sql_postgres import AccountModel, RoleModel
+from src.infra.helper import QueryBuilder as query_builder
 
 
 class AccountRepository:
@@ -12,10 +13,10 @@ class AccountRepository:
         return self.__adapt_account(account_model)
 
     async def update(self, params) -> dict:
-        account = AccountModel.query.get(params["id"])
-        if not account:
+        account_model = AccountModel.query.get(params["id"])
+        if not account_model:
             return None
-        data = account.update(
+        data = account_model.update(
             username=params["username"],
             login=params["login"],
             roles=self.__get_roles(params["roles"]),
@@ -24,7 +25,6 @@ class AccountRepository:
 
     async def delete(self, id: int) -> dict:
         exist = AccountModel.query.get(id)
-        print(exist)
         if not exist:
             return None
         data = exist.delete()
@@ -44,6 +44,15 @@ class AccountRepository:
             )
         return None
 
+    async def filter_fields(self, values) -> dict:
+        account_models = (
+            query_builder.select(AccountModel)
+            .these_values(values)
+            .these_fields(["username", "login"])
+            .done()
+        )
+        return self.__adapt_accounts(account_models, len(account_models))
+
     async def load_by_id(self, id: int) -> dict:
         account_model = AccountModel.query.get(id)
         return self.__adapt_account(account_model)
@@ -55,8 +64,15 @@ class AccountRepository:
         return False
 
     def __get_roles(self, account_roles):
-        roles = [RoleModel.instance().get_or_create(name=role) for role in account_roles]
+        roles = [RoleModel().get_or_create(name=role) for role in account_roles]
         return roles
+
+    def __adapt_accounts(self, models: list[AccountModel], count: int):
+        return (
+            dict(data=[self.__adapt_account(model) for model in models], count=count)
+            if models
+            else None
+        )
 
     def __adapt_account(self, model: AccountModel) -> dict:
         return (

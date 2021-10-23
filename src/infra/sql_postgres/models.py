@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from src.infra.helper import get_current_date, get_current_user
+from src.infra.helper import CurrentAudit as audit
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -21,15 +21,15 @@ class Model:
         return exist
 
     def create(self):
-        self.created_by = get_current_user()
-        self.created_at = get_current_date()
+        self.created_by = audit.get_current_user()
+        self.created_at = audit.get_current_date()
         db.session.add(self)
         db.session.commit()
         return self
 
     def update(self, **data: dict):
-        self.updated_at = get_current_date()
-        self.updated_by = get_current_user()
+        self.updated_at = audit.get_current_date()
+        self.updated_by = audit.get_current_user()
         self.__set_attr(data)
         db.session.commit()
         return self
@@ -38,6 +38,11 @@ class Model:
         db.session.delete(self)
         db.session.commit()
         return self
+
+    def filter_by_queries(self, queries):
+        if len(queries) > 0:
+            return self.query.filter(*queries).all()
+        return self.query.filter().all()
 
     def __set_attr(self, data):
         for k, v in data.items():
@@ -53,10 +58,6 @@ class RoleModel(db.Model, Model):
     def __init__(self, name: str = None) -> None:
         super().__init__()
         self.name = name
-
-    @staticmethod
-    def instance():
-        return RoleModel()
 
 
 account_roles = db.Table(
@@ -76,7 +77,9 @@ class AccountModel(db.Model, Model):
     password = db.Column("password", db.String(150), nullable=True)
     roles = db.relationship("RoleModel", account_roles)
 
-    def __init__(self, username: str, login: str, password: str, roles: list) -> None:
+    def __init__(
+        self, username: str = None, login: str = None, password: str = None, roles: list = []
+    ) -> None:
         super().__init__()
         self.username = username
         self.login = login
