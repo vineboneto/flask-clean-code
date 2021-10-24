@@ -1,4 +1,3 @@
-import json
 from faker import Faker
 from tests.conftest import client
 from tests.mocks import mock_account, mock_authorization, mock_create_account
@@ -9,7 +8,6 @@ faker = Faker()
 def test_update_account_200(client):
     account = mock_create_account(client)
     response = client.put(f"/accounts/{account['id']}", json=account, headers=mock_authorization())
-    print(response.data)
     assert response.status_code == 200
 
 

@@ -1,4 +1,3 @@
-import json
 from flask_jwt_extended import create_access_token
 from faker import Faker
 
@@ -27,6 +26,5 @@ def mock_account(account: dict = {}):
 def mock_create_account(client):
     request_body = mock_account(dict(login=make_faker().name()))
     response_account = client.post("/accounts", json=request_body)
-    data = json.loads(response_account.data)
-    print(data)
+    data = response_account.json
     return data
